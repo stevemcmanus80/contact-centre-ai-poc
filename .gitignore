@@ -19,3 +19,14 @@ Thumbs.db
 .terraform/
 *.tfstate
 *.tfstate.*
+
+# Build artifacts
+lambda.zip
+environment.json
+
+lambda/lex_orchestrator/build/
+lambda/lex_orchestrator/lambda.zip
+
+# Python cache
+__pycache__/
+*.pyc

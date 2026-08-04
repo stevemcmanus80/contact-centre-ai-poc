@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Amazon Connect POC Widget</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Amazon Connect POC Chat + Web Calling Widget</h2>
+    
+    <!-- Insert the widget script provided by Amazon Connect -->
+<script type="text/javascript">
+  (function(w, d, x, id){
+    s=d.createElement('script');
+    s.src='https://cc-lab.my.connect.aws/connectwidget/static/amazon-connect-chat-interface-client.js';
+    s.async=1;
+    s.id=id;
+    d.getElementsByTagName('head')[0].appendChild(s);
+    w[x] =  w[x] || function() { (w[x].ac = w[x].ac || []).push(arguments) };
+  })(window, document, 'amazon_connect', '82c4f145-7848-44eb-be16-088b354b026d');
+  amazon_connect('styles', { iconType: 'CHAT_VOICE', openChat: { color: '#ffffff', backgroundColor: '#123456' }, closeChat: { color: '#ffffff', backgroundColor: '#123456'} });
+  amazon_connect('snippetId', 'QVFJREFIaFpvSmlkVlA5ZmlEZlNzMXhjOGF5cU1QQXl4Yk5PTHVoQm5IYWZiS21Wd0FHc2JwaWlMOXRvNzhsZ1RXa2dDRjZVQUFBQWJqQnNCZ2txaGtpRzl3MEJCd2FnWHpCZEFnRUFNRmdHQ1NxR1NJYjNEUUVIQVRBZUJnbGdoa2dCWlFNRUFTNHdFUVFNTTFCNFRPeGZEdCtLKzc2OUFnRVFnQ3VVL1Q0WjRCQXlRTU1QRitCRmc1Qjh6ekU5M0lUb1liTmRTNnlnclVCa2tNd3NxL1A4M3g3TTh5QXU6OmdjcXRIMy95bTdxMlI2aTc3RkZQbTkyR2U1MDZSbzdxMXZ4ZGhyN29FQXNxblhRcDhlR2k1U3pCMVg5MElSblZ6V25MaEpVOTRBbG5JVERiTFBWSURRUlpPM1BKVjNBcFAyOHJkT3NuaFNwanFBYmpabHhPMXgwZ0tueHFjVjZ2d0lsU210T09pS1lUNFhQQjE5MEdhNjI1cEdxcVlNOD0=');
+  amazon_connect('supportedMessagingContentTypes', [ 'text/plain', 'text/markdown', 'application/vnd.amazonaws.connect.message.interactive', 'application/vnd.amazonaws.connect.message.interactive.response' ]);
+</script>
+</body>
+</html>
+

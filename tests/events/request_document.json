@@ -1,0 +1,14 @@
+{
+  "sessionState": {
+    "intent": {
+      "name": "RequestDocument",
+      "slots": {
+        "ReferenceNumber": {
+          "value": {
+            "interpretedValue": "UC123456"
+          }
+        }
+      }
+    }
+  }
+}

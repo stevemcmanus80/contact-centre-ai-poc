@@ -1,0 +1,7 @@
+{
+    "project": "contact-centre-ai-poc",
+    "lambda": "lex_orchestrator",
+    "region": "eu-west-2",
+    "dynamodb_table": "ContactCentreCases",
+    "bedrock_model": "global.amazon.nova-2-lite-v1:0"
+}

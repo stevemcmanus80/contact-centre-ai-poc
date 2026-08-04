@@ -1,0 +1,14 @@
+{
+  "sessionState": {
+    "intent": {
+      "name": "CheckCaseStatus",
+      "slots": {
+        "ReferenceNumber": {
+          "value": {
+            "interpretedValue": "UC123456"
+          }
+        }
+      }
+    }
+  }
+}
