@@ -12,3 +12,25 @@ resource "aws_dynamodb_table" "contact_centre_cases" {
     type = "S"
   }
 }
+
+resource "aws_lambda_function" "lex_orchestrator" {
+
+  function_name = var.lambda_function_name
+
+  role    = "arn:aws:iam::533140817207:role/service-role/lex_orchestrator-role-cad9eis1"
+  handler = "lambda_function.lambda_handler"
+  runtime = "python3.12"
+
+  filename         = "../lambda.zip"
+  source_code_hash = filebase64sha256("../lambda.zip")
+
+  timeout     = 3
+  memory_size = 128
+
+  environment {
+    variables = {
+      DYNAMODB_TABLE  = var.dynamodb_table_name
+      BEDROCK_MODEL_ID = var.bedrock_model_id
+    }
+  }
+}
