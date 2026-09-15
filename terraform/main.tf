@@ -29,7 +29,7 @@ resource "aws_lambda_function" "lex_orchestrator" {
 
   environment {
     variables = {
-      DYNAMODB_TABLE  = var.dynamodb_table_name
+      DYNAMODB_TABLE   = var.dynamodb_table_name
       BEDROCK_MODEL_ID = var.bedrock_model_id
     }
   }
@@ -127,6 +127,149 @@ resource "aws_lexv2models_bot" "contact_centre_ai" {
   type     = "Bot"
 
   tags = {
-  AmazonConnectEnabled = "True"
+    AmazonConnectEnabled = "True"
+  }
+}
+
+resource "aws_lexv2models_bot_locale" "en_gb" {
+  bot_id                           = aws_lexv2models_bot.contact_centre_ai.id
+  bot_version                      = "DRAFT"
+  locale_id                        = "en_GB"
+  n_lu_intent_confidence_threshold = 0.4
+
+  voice_settings {
+    engine   = "neural"
+    voice_id = "Amy"
+  }
+}
+
+resource "aws_lexv2models_intent" "check_case_status" {
+  bot_id      = aws_lexv2models_bot.contact_centre_ai.id
+  bot_version = aws_lexv2models_bot_locale.en_gb.bot_version
+  locale_id   = aws_lexv2models_bot_locale.en_gb.locale_id
+
+  name = "CheckCaseStatus"
+
+  sample_utterance {
+    utterance = "Where is my claim?"
+  }
+
+  sample_utterance {
+    utterance = "Check my case"
+  }
+
+  sample_utterance {
+    utterance = "What's happening with my application?"
+  }
+
+  sample_utterance {
+    utterance = "Can you tell me my claim status?"
+  }
+
+  sample_utterance {
+    utterance = "I want to check my benefit"
+  }
+
+  sample_utterance {
+    utterance = "Has my application been processed?"
+  }
+
+  sample_utterance {
+    utterance = "Any update on my case?"
+  }
+
+  sample_utterance {
+    utterance = "Check my review status"
+  }
+
+  dialog_code_hook {
+    enabled = false
+  }
+
+  fulfillment_code_hook {
+    enabled = true
+    active  = true
+
+    post_fulfillment_status_specification {
+      success_next_step {
+        dialog_action {
+          type = "EndConversation"
+        }
+      }
+
+      failure_next_step {
+        dialog_action {
+          type = "EndConversation"
+        }
+      }
+
+      timeout_next_step {
+        dialog_action {
+          type = "EndConversation"
+        }
+      }
+    }
+  }
+
+  initial_response_setting {
+    next_step {
+      dialog_action {
+        type = "InvokeDialogCodeHook"
+      }
+    }
+
+    code_hook {
+      enable_code_hook_invocation = true
+      active                      = true
+
+      post_code_hook_specification {
+        success_next_step {
+          dialog_action {
+            type           = "ElicitSlot"
+            slot_to_elicit = "ReferenceNumber"
+          }
+        }
+
+        failure_next_step {
+          dialog_action {
+            type = "EndConversation"
+          }
+        }
+
+        timeout_next_step {
+          dialog_action {
+            type = "EndConversation"
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "aws_lexv2models_slot" "check_case_status_reference_number" {
+  bot_id      = aws_lexv2models_bot.contact_centre_ai.id
+  bot_version = aws_lexv2models_bot_locale.en_gb.bot_version
+  intent_id   = aws_lexv2models_intent.check_case_status.intent_id
+  locale_id   = aws_lexv2models_bot_locale.en_gb.locale_id
+  name        = "ReferenceNumber"
+
+  slot_type_id = "AMAZON.AlphaNumeric"
+
+  value_elicitation_setting {
+    slot_constraint = "Required"
+
+    prompt_specification {
+      max_retries                = 4
+      allow_interrupt            = true
+      message_selection_strategy = "Random"
+
+      message_group {
+        message {
+          plain_text_message {
+            value = "Can I have your reference number?"
+          }
+        }
+      }
+    }
   }
 }
