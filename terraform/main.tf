@@ -648,3 +648,121 @@ resource "aws_connect_queue" "support" {
   name                  = "Support Queue"
   hours_of_operation_id = aws_connect_hours_of_operation.basic_hours.hours_of_operation_id
 }
+
+resource "aws_connect_routing_profile" "basic" {
+  instance_id               = "b96ac610-3a3d-41bc-9c84-bac77e4cd0a4"
+  name                      = "Basic Routing Profile"
+  description               = "A simple routing profile."
+  default_outbound_queue_id = "8c892b30-cf75-4328-a19e-177aea840279"
+
+  media_concurrencies {
+    channel     = "CHAT"
+    concurrency = 2
+
+    cross_channel_behavior {
+      behavior_type = "ROUTE_CURRENT_CHANNEL_ONLY"
+    }
+  }
+
+  media_concurrencies {
+    channel     = "TASK"
+    concurrency = 1
+
+    cross_channel_behavior {
+      behavior_type = "ROUTE_CURRENT_CHANNEL_ONLY"
+    }
+  }
+
+  media_concurrencies {
+    channel     = "VOICE"
+    concurrency = 1
+
+    cross_channel_behavior {
+      behavior_type = "ROUTE_CURRENT_CHANNEL_ONLY"
+    }
+  }
+
+  queue_configs {
+    queue_id = "729849a2-67ba-4097-9217-6e71ec4c8ee8"
+    channel  = "CHAT"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "729849a2-67ba-4097-9217-6e71ec4c8ee8"
+    channel  = "TASK"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "729849a2-67ba-4097-9217-6e71ec4c8ee8"
+    channel  = "VOICE"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "8c892b30-cf75-4328-a19e-177aea840279"
+    channel  = "CHAT"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "8c892b30-cf75-4328-a19e-177aea840279"
+    channel  = "TASK"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "8c892b30-cf75-4328-a19e-177aea840279"
+    channel  = "VOICE"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "9ecdd4e5-843a-4f6a-8ef5-100c9999e8c8"
+    channel  = "CHAT"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "9ecdd4e5-843a-4f6a-8ef5-100c9999e8c8"
+    channel  = "TASK"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "9ecdd4e5-843a-4f6a-8ef5-100c9999e8c8"
+    channel  = "VOICE"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "d9222b0a-36f0-48ae-b06e-b63082c6c40b"
+    channel  = "CHAT"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "d9222b0a-36f0-48ae-b06e-b63082c6c40b"
+    channel  = "TASK"
+    priority = 1
+    delay    = 0
+  }
+
+  queue_configs {
+    queue_id = "d9222b0a-36f0-48ae-b06e-b63082c6c40b"
+    channel  = "VOICE"
+    priority = 1
+    delay    = 0
+  }
+}
