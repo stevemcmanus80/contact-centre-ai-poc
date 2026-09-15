@@ -529,3 +529,11 @@ resource "aws_lambda_permission" "lex_development" {
 
   source_arn = "arn:aws:lex:eu-west-2:533140817207:bot-alias/XVAQFSUUB5/3BEZG3ODQH"
 }
+
+resource "aws_connect_contact_flow" "ai_poc_v1" {
+  instance_id = "b96ac610-3a3d-41bc-9c84-bac77e4cd0a4"
+  name        = "AI_PoC_v1"
+  type        = "CONTACT_FLOW"
+
+  content = file("${path.module}/contact_flow.json")
+}
