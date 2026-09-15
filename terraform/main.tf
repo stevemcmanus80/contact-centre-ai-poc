@@ -108,3 +108,7 @@ resource "aws_iam_role_policy" "bedrock_invoke_model" {
     ]
   })
 }
+
+resource "aws_cloudwatch_log_group" "lex_orchestrator" {
+  name = "/aws/lambda/lex_orchestrator"
+}
