@@ -537,3 +537,114 @@ resource "aws_connect_contact_flow" "ai_poc_v1" {
 
   content = file("${path.module}/contact_flow.json")
 }
+
+resource "aws_connect_hours_of_operation" "basic_hours" {
+  instance_id = "b96ac610-3a3d-41bc-9c84-bac77e4cd0a4"
+  name        = "Basic Hours"
+  description = "Always open hours"
+  time_zone   = "America/New_York"
+
+  config {
+    day = "MONDAY"
+
+    start_time {
+      hours   = 0
+      minutes = 0
+    }
+
+    end_time {
+      hours   = 0
+      minutes = 0
+    }
+  }
+
+  config {
+    day = "TUESDAY"
+
+    start_time {
+      hours   = 0
+      minutes = 0
+    }
+
+    end_time {
+      hours   = 0
+      minutes = 0
+    }
+  }
+
+  config {
+    day = "WEDNESDAY"
+
+    start_time {
+      hours   = 0
+      minutes = 0
+    }
+
+    end_time {
+      hours   = 0
+      minutes = 0
+    }
+  }
+
+  config {
+    day = "THURSDAY"
+
+    start_time {
+      hours   = 0
+      minutes = 0
+    }
+
+    end_time {
+      hours   = 0
+      minutes = 0
+    }
+  }
+
+  config {
+    day = "FRIDAY"
+
+    start_time {
+      hours   = 0
+      minutes = 0
+    }
+
+    end_time {
+      hours   = 0
+      minutes = 0
+    }
+  }
+
+  config {
+    day = "SATURDAY"
+
+    start_time {
+      hours   = 0
+      minutes = 0
+    }
+
+    end_time {
+      hours   = 0
+      minutes = 0
+    }
+  }
+
+  config {
+    day = "SUNDAY"
+
+    start_time {
+      hours   = 0
+      minutes = 0
+    }
+
+    end_time {
+      hours   = 0
+      minutes = 0
+    }
+  }
+}
+
+resource "aws_connect_queue" "support" {
+  instance_id           = "b96ac610-3a3d-41bc-9c84-bac77e4cd0a4"
+  name                  = "Support Queue"
+  hours_of_operation_id = aws_connect_hours_of_operation.basic_hours.hours_of_operation_id
+}
