@@ -112,3 +112,21 @@ resource "aws_iam_role_policy" "bedrock_invoke_model" {
 resource "aws_cloudwatch_log_group" "lex_orchestrator" {
   name = "/aws/lambda/lex_orchestrator"
 }
+
+resource "aws_lexv2models_bot" "contact_centre_ai" {
+  name        = "ContactCentreAI"
+  description = "AI Contact Centre PoC for Amazon Connect"
+
+  data_privacy {
+    child_directed = false
+  }
+
+  idle_session_ttl_in_seconds = 300
+
+  role_arn = "arn:aws:iam::533140817207:role/service-role/AmazonLexServiceRole-ZSN466DOR9"
+  type     = "Bot"
+
+  tags = {
+  AmazonConnectEnabled = "True"
+  }
+}
