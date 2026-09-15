@@ -1066,3 +1066,25 @@ resource "aws_connect_security_profile" "admin" {
     "Workspaces.View"
   ]
 }
+
+resource "aws_connect_user" "lab_admin" {
+  instance_id        = "b96ac610-3a3d-41bc-9c84-bac77e4cd0a4"
+  name               = "lab-admin"
+  routing_profile_id = aws_connect_routing_profile.basic.routing_profile_id
+
+  security_profile_ids = [
+    aws_connect_security_profile.admin.security_profile_id
+  ]
+
+  identity_info {
+    first_name = "Lab"
+    last_name  = "Admin"
+    email      = "steve.mcmanus@hotmail.co.uk"
+  }
+
+  phone_config {
+    phone_type                    = "SOFT_PHONE"
+    auto_accept                   = false
+    after_contact_work_time_limit = 0
+  }
+}
