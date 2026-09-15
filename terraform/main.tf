@@ -375,3 +375,146 @@ resource "aws_lexv2models_intent" "speak_to_adviser" {
     }
   }
 }
+
+resource "aws_lexv2models_intent" "request_document" {
+  bot_id      = aws_lexv2models_bot.contact_centre_ai.id
+  bot_version = aws_lexv2models_bot_locale.en_gb.bot_version
+  locale_id   = aws_lexv2models_bot_locale.en_gb.locale_id
+
+  name = "RequestDocument"
+
+  sample_utterance {
+    utterance = "Send me another letter"
+  }
+
+  sample_utterance {
+    utterance = "I lost my documents"
+  }
+
+  sample_utterance {
+    utterance = "Can I have another copy"
+  }
+
+  sample_utterance {
+    utterance = "Resend my award notice"
+  }
+
+  sample_utterance {
+    utterance = "I need another document"
+  }
+
+  sample_utterance {
+    utterance = "Please send my paperwork again"
+  }
+
+  sample_utterance {
+    utterance = "I've lost my letter"
+  }
+
+  sample_utterance {
+    utterance = "Can you resend my documents"
+  }
+
+  dialog_code_hook {
+    enabled = false
+  }
+
+  fulfillment_code_hook {
+    enabled = true
+    active  = true
+
+    post_fulfillment_status_specification {
+      success_next_step {
+        dialog_action {
+          type = "EndConversation"
+        }
+      }
+
+      failure_next_step {
+        dialog_action {
+          type = "EndConversation"
+        }
+      }
+
+      timeout_next_step {
+        dialog_action {
+          type = "EndConversation"
+        }
+      }
+    }
+  }
+
+  initial_response_setting {
+    next_step {
+      dialog_action {
+        type = "InvokeDialogCodeHook"
+      }
+    }
+
+    code_hook {
+      enable_code_hook_invocation = true
+      active                      = true
+
+      post_code_hook_specification {
+        success_next_step {
+          dialog_action {
+            type           = "ElicitSlot"
+            slot_to_elicit = "ReferenceNumber"
+          }
+        }
+
+        failure_next_step {
+          dialog_action {
+            type = "EndConversation"
+          }
+        }
+
+        timeout_next_step {
+          dialog_action {
+            type = "EndConversation"
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "aws_lexv2models_slot" "request_document_reference_number" {
+  bot_id      = aws_lexv2models_bot.contact_centre_ai.id
+  bot_version = aws_lexv2models_bot_locale.en_gb.bot_version
+  intent_id   = aws_lexv2models_intent.request_document.intent_id
+  locale_id   = aws_lexv2models_bot_locale.en_gb.locale_id
+  name        = "ReferenceNumber"
+
+  slot_type_id = "AMAZON.AlphaNumeric"
+
+  value_elicitation_setting {
+    slot_constraint = "Required"
+
+    prompt_specification {
+      max_retries                = 4
+      allow_interrupt            = true
+      message_selection_strategy = "Random"
+
+      message_group {
+        message {
+          plain_text_message {
+            value = "Please provide your reference number."
+          }
+        }
+
+        variation {
+          plain_text_message {
+            value = "What's your reference number?"
+          }
+        }
+
+        variation {
+          plain_text_message {
+            value = "Can I have your case reference?"
+          }
+        }
+      }
+    }
+  }
+}
