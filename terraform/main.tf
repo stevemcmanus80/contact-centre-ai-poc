@@ -518,3 +518,14 @@ resource "aws_lexv2models_slot" "request_document_reference_number" {
     }
   }
 }
+
+resource "aws_lambda_permission" "lex_development" {
+  statement_id  = "lex-lambda-invokeFunction-XVAQFSUUB5-3BEZG3ODQH"
+  action        = "lambda:invokeFunction"
+  function_name = aws_lambda_function.lex_orchestrator.function_name
+  principal     = "lex.amazonaws.com"
+
+  source_account = data.aws_caller_identity.current.account_id
+
+  source_arn = "arn:aws:lex:eu-west-2:533140817207:bot-alias/XVAQFSUUB5/3BEZG3ODQH"
+}
