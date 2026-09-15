@@ -82,3 +82,29 @@ resource "aws_iam_policy" "lambda_basic_execution" {
     ]
   })
 }
+
+data "aws_iam_policy" "dynamodb_read_only" {
+  arn = "arn:aws:iam::aws:policy/AmazonDynamoDBReadOnlyAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dynamodb_read_only" {
+  role       = aws_iam_role.lex_orchestrator.name
+  policy_arn = data.aws_iam_policy.dynamodb_read_only.arn
+}
+
+resource "aws_iam_role_policy" "bedrock_invoke_model" {
+  name = "BedrockInvokeModelPolicy"
+  role = aws_iam_role.lex_orchestrator.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "bedrock:InvokeModel"
+        Resource = "*"
+      }
+    ]
+  })
+}
