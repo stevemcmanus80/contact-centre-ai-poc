@@ -273,3 +273,105 @@ resource "aws_lexv2models_slot" "check_case_status_reference_number" {
     }
   }
 }
+
+resource "aws_lexv2models_intent" "speak_to_adviser" {
+  bot_id      = aws_lexv2models_bot.contact_centre_ai.id
+  bot_version = aws_lexv2models_bot_locale.en_gb.bot_version
+  locale_id   = aws_lexv2models_bot_locale.en_gb.locale_id
+
+  name = "SpeakToAdviser"
+
+  sample_utterance {
+    utterance = "Speak to someone"
+  }
+
+  sample_utterance {
+    utterance = "I need an adviser"
+  }
+
+  sample_utterance {
+    utterance = "Put me through"
+  }
+
+  sample_utterance {
+    utterance = "Transfer me"
+  }
+
+  sample_utterance {
+    utterance = "Human please"
+  }
+
+  sample_utterance {
+    utterance = "Can I talk to an agent?"
+  }
+
+  sample_utterance {
+    utterance = "I'd like to speak to somebody"
+  }
+
+  sample_utterance {
+    utterance = "Connect me to an adviser"
+  }
+
+  dialog_code_hook {
+    enabled = false
+  }
+
+  fulfillment_code_hook {
+    enabled = true
+    active  = true
+
+    post_fulfillment_status_specification {
+      success_next_step {
+        dialog_action {
+          type = "EndConversation"
+        }
+      }
+
+      failure_next_step {
+        dialog_action {
+          type = "EndConversation"
+        }
+      }
+
+      timeout_next_step {
+        dialog_action {
+          type = "EndConversation"
+        }
+      }
+    }
+  }
+
+  initial_response_setting {
+    next_step {
+      dialog_action {
+        type = "InvokeDialogCodeHook"
+      }
+    }
+
+    code_hook {
+      enable_code_hook_invocation = true
+      active                      = true
+
+      post_code_hook_specification {
+        success_next_step {
+          dialog_action {
+            type = "FulfillIntent"
+          }
+        }
+
+        failure_next_step {
+          dialog_action {
+            type = "EndConversation"
+          }
+        }
+
+        timeout_next_step {
+          dialog_action {
+            type = "EndConversation"
+          }
+        }
+      }
+    }
+  }
+}
