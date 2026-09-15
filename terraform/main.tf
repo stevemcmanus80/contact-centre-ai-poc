@@ -55,3 +55,30 @@ resource "aws_iam_role" "lex_orchestrator" {
     ]
   })
 }
+
+resource "aws_iam_policy" "lambda_basic_execution" {
+  name = "AWSLambdaBasicExecutionRole-5d8eefc3-1af0-453d-a460-fdbda07c5dbe"
+  path = "/service-role/"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "logs:CreateLogGroup"
+        Resource = "arn:aws:logs:eu-west-2:533140817207:*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = [
+          "arn:aws:logs:eu-west-2:533140817207:log-group:/aws/lambda/lex_orchestrator:*"
+        ]
+      }
+    ]
+  })
+}
